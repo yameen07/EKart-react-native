@@ -3,6 +3,7 @@ import {View, TextInput, Text, StyleSheet} from 'react-native';
 import CustomButton from '../components/CustomButton';
 import {useFirebase} from '../providers/firebaseProvider';
 import Loader from './Loader';
+import {insertDummyData} from '../services/userService';
 
 const Login = ({navigation}) => {
   const {signIn, user} = useFirebase();
@@ -11,6 +12,7 @@ const Login = ({navigation}) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  insertDummyData();
 
   useEffect(() => {
     if (user) {
