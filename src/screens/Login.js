@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, TextInput, Text, StyleSheet} from 'react-native';
 import CustomButton from '../components/CustomButton';
 import {useFirebase} from '../providers/firebaseProvider';
-import Loader from './Loader';
+import Loader from '../components/Loader';
 import {insertDummyData} from '../services/userService';
 
 const Login = ({navigation}) => {
@@ -12,7 +12,7 @@ const Login = ({navigation}) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  insertDummyData();
+  // insertDummyData();
 
   useEffect(() => {
     if (user) {

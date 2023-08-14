@@ -61,7 +61,6 @@ const products = {
 };
 
 export const createUser = async (userData, uid) => {
-  console.log(`${url}users/${uid}.json'`);
   try {
     const response = await axios.put(`${url}users/${uid}.json`, userData);
     console.log('User created:', response.data);
@@ -74,9 +73,28 @@ export const getUsers = async () => {
   try {
     const response = await axios.get(url + '/users.json');
     const users = response.data;
-    console.log(users);
   } catch (error) {
     console.error('Error getting users:', error);
+  }
+};
+
+export const getProducts = async () => {
+  try {
+    const response = await axios.get(url + '/products.json');
+    const products = response.data;
+    return products;
+  } catch (error) {
+    console.error('Error getting products:', error);
+  }
+};
+
+export const getCategories = async () => {
+  try {
+    const response = await axios.get(url + '/categories.json');
+    const categories = response.data;
+    return categories;
+  } catch (error) {
+    console.error('Error getting categories:', error);
   }
 };
 
@@ -89,28 +107,48 @@ export const getSingleUser = async uid => {
     console.error('Error getting users:', error);
   }
 };
+
 export const insertDummyData = async () => {
   try {
-    // Insert categories
-    for (const categoryId in categories) {
-      let target = categories[categoryId];
-      console.log(categories[categoryId].name);
-      await axios.put(
-        `${url}/categories/${categories[categoryId].name}.json`,
-        categories[categoryId],
-      );
-    }
+    await axios.put(`${url}/categories.json`, categories);
 
-    //Insert products
-    for (const productId in products) {
-      await axios.put(
-        `${url}/products/${products[productId].category}.json`,
-        products[productId],
-      );
-    }
+    await axios.put(`${url}/products.json`, products);
 
     console.log('Dummy data inserted successfully.');
   } catch (error) {
     console.error('Error inserting dummy data:', error);
+  }
+};
+
+export const addToWishlist = async (item, uid) => {
+  try {
+    const response = await axios.put(
+      `${url}wishlist/${uid}/${item.name}.json`,
+      item,
+    );
+    console.log('item added to wishlist:', response.data);
+  } catch (error) {
+    console.log('Error adding to wishlist:', error);
+  }
+};
+
+export const getWishlistForUser = async uid => {
+  try {
+    const response = await axios.get(`${url}wishlist/${uid}.json`);
+    const wishlist = response.data;
+    return wishlist;
+  } catch (error) {
+    console.error('Error getting categories:', error);
+  }
+};
+
+export const removeFromWishlist = async (itemName, uid) => {
+  try {
+    const response = await axios.delete(
+      `${url}wishlist/${uid}/${itemName}.json`,
+    );
+    console.log('Item removed from wishlist:', response.data);
+  } catch (error) {
+    console.log('Error removing from wishlist:', error);
   }
 };

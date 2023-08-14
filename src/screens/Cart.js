@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import Loader from './Loader';
+import Loader from '../components/Loader';
 
 const Cart = () => {
   return (
