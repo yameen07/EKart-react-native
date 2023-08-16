@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {getWishlistForUser} from '../services/userService';
 import {useFirebase} from '../providers/firebaseProvider';
 import ProductItem from '../components/ProductItem';
 import Loader from '../components/Loader';
+import CustomButton from '../components/CustomButton';
 
-const Wishlist = () => {
-  const {user} = useFirebase();
+const Wishlist = ({navigation}) => {
+  const {user, signOut} = useFirebase();
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -23,6 +24,12 @@ const Wishlist = () => {
     }
   }, [products]);
 
+  const signOutApp = () => {
+    signOut().then(() => {
+      navigation.replace('Login');
+    });
+  };
+
   if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
@@ -33,6 +40,14 @@ const Wishlist = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Wishlist</Text>
+        <CustomButton
+          style={styles.logOut}
+          title="Log Out"
+          onPress={signOutApp}
+        />
+      </View>
       <ProductItem isCalledFromWishlist={true} products={products} />
     </View>
   );
@@ -45,7 +60,25 @@ styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    marginTop: 50,
+    backgroundColor: '#e0ebe2',
+    marginBottom: 90,
+  },
+  logOut: {
+    width: 80,
+    position: 'absolute',
+    right: 0,
+    marginTop: 40,
+  },
+  header: {
+    padding: 20,
+    backgroundColor: '#915986',
+    flexDirection: 'row',
+    paddingTop: 40,
+  },
+  headerText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 

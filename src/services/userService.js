@@ -126,7 +126,7 @@ export const addToWishlist = async (item, uid) => {
       `${url}wishlist/${uid}/${item.name}.json`,
       item,
     );
-    console.log('item added to wishlist:', response.data);
+    console.log('item added to wishlist:');
   } catch (error) {
     console.log('Error adding to wishlist:', error);
   }
@@ -138,7 +138,7 @@ export const getWishlistForUser = async uid => {
     const wishlist = response.data;
     return wishlist;
   } catch (error) {
-    console.error('Error getting categories:', error);
+    console.error('Error getting wishlist:', error);
   }
 };
 
@@ -147,8 +147,39 @@ export const removeFromWishlist = async (itemName, uid) => {
     const response = await axios.delete(
       `${url}wishlist/${uid}/${itemName}.json`,
     );
-    console.log('Item removed from wishlist:', response.data);
+    console.log('Item removed from wishlist:');
   } catch (error) {
     console.log('Error removing from wishlist:', error);
+  }
+};
+
+export const addToCart = async (item, uid) => {
+  try {
+    const response = await axios.put(
+      `${url}cart/${uid}/${item.name}.json`,
+      item,
+    );
+    console.log('item added to cart:');
+  } catch (error) {
+    console.log('Error adding to cart:', error);
+  }
+};
+
+export const getCartForUser = async uid => {
+  try {
+    const response = await axios.get(`${url}cart/${uid}.json`);
+    const wishlist = response.data;
+    return wishlist;
+  } catch (error) {
+    console.error('Error getting cart:', error);
+  }
+};
+
+export const removeFromCart = async (itemName, uid) => {
+  try {
+    const response = await axios.delete(`${url}cart/${uid}/${itemName}.json`);
+    console.log('Item removed from cart:');
+  } catch (error) {
+    console.log('Error removing from cart:', error);
   }
 };

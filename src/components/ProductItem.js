@@ -9,12 +9,22 @@ import {
 } from 'react-native';
 import CustomButton from './CustomButton';
 import {useFirebase} from '../providers/firebaseProvider';
-import {addToWishlist, removeFromWishlist} from '../services/userService';
+import {
+  addToWishlist,
+  addToCart,
+  removeFromCart,
+  removeFromWishlist,
+} from '../services/userService';
 
-const ProductItem = ({isCalledFromWishlist, products}) => {
+const ProductItem = ({isCalledFromWishlist, isCalledFromCart, products}) => {
   const {user} = useFirebase();
 
-  const addToCart = item => {};
+  const addItemToCart = item => {
+    userId = user.uid;
+    addToCart(item, userId).then(() => {
+      console.log('success');
+    });
+  };
 
   const addItemToWishlist = item => {
     userId = user.uid;
@@ -23,8 +33,10 @@ const ProductItem = ({isCalledFromWishlist, products}) => {
     });
   };
 
-  const removeItemFromWishlist = item => {
-    removeFromWishlist(item.name, user.uid);
+  const removeItem = item => {
+    isCalledFromCart
+      ? removeFromCart(item.name, user.uid)
+      : removeFromWishlist(item.name, user.uid);
   };
 
   const renderedProduct = ({item}) => {
@@ -34,10 +46,10 @@ const ProductItem = ({isCalledFromWishlist, products}) => {
         <Text style={styles.title}>{item.name}</Text>
         <Text style={styles.price}>₹{item.price}</Text>
         <View style={styles.buttonContainer}>
-          {isCalledFromWishlist ? (
+          {isCalledFromWishlist || isCalledFromCart ? (
             <CustomButton
               title="Remove"
-              onPress={() => removeItemFromWishlist(item)}
+              onPress={() => removeItem(item)}
               style={[styles.button, {backgroundColor: 'red'}]}
             />
           ) : (
@@ -47,11 +59,13 @@ const ProductItem = ({isCalledFromWishlist, products}) => {
               style={[styles.button, {backgroundColor: 'blue'}]}
             />
           )}
-          <CustomButton
-            title="Cart"
-            onPress={() => addToCart(item)}
-            style={[styles.button, {backgroundColor: 'green'}]}
-          />
+          {isCalledFromCart ? null : (
+            <CustomButton
+              title="Cart"
+              onPress={() => addItemToCart(item)}
+              style={[styles.button, {backgroundColor: 'green'}]}
+            />
+          )}
         </View>
       </View>
     );
